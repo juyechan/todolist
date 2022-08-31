@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace = "com.springboot.todolist.domain.todo.TodoRepository">
+  	<insert id="save" parameterType="com.springboot.todolist.domain.todo.Todo">
+  	
+  	insert into
+  		todo_mst
+  	values(
+  		0,
+  		#{todo_content},
+  		0,
+  		#{importance_flag},
+  		now(),
+  		now()
+  	)
+  	
+  	</insert>
+  	
+  	<select id="getTodoList" parameterType="hashmap" resultType="com.springboot.todolist.domain.todo.Todo">
+  		select
+			tm.todo_code,
+			
+			tm.todo_content,
+			tm.todo_complete,
+			tm.importance_flag,
+			
+			tt.total_count,
+			tc.incomplete_count,
+			
+			tm.create_date,
+			tm.update_date
+			
+		from
+			todo_mst tm
+			LEFT OUTER JOIN (select
+											COUNT(*) AS total_count
+										FROM
+											todo_mst
+											where
+											<choose>
+												<when test='type.equals("importance")'>
+													importance_flag = 1
+												</when>
+												<when test='type.equals("complete")'>
+													todo_complete = 1
+												</when>
+												<when test='type.equals("incomplete")'>
+													todo_complete = 0
+												</when>
+												<otherwise>
+													1 = 1
+												</otherwise>
+											</choose>
+											
+											) tt ON (1 = 1)
+			LEFT OUTER JOIN(SELECT 
+							COUNT(todo_complete) AS incomplete_count
+							from
+								todo_mst
+							where
+								todo_complete = 0
+								
+									<if test='type.equals("importance")'>
+										and importance_flag = 1
+									</if>
+								
+									) tc ON(1 = 1)
+		where
+			<choose>
+				<when test='type.equals("importance")'>
+					importance_flag = 1
+				</when>
+				<when test='type.equals("complete")'>
+					todo_complete = 1
+				</when>
+				<when test='type.equals("incomplete")'>
+					todo_complete = 0
+				</when>
+				<otherwise>
+					1 = 1
+				</otherwise>
+		</choose>
+		order by
+			todo_code desc
+		limit #{index}, #{count}
+  	</select>
+  	
+  	<update id="updateTodoComplete" parameterType="Integer">
+  	
+		UPDATE
+			todo_mst
+		SET
+			todo_complete = CASE WHEN todo_complete = '0' THEN 1 ELSE 0 END
+		WHERE
+			todo_code  = #{todo_code}
+			
+  	</update>
+  	<update id="updateTodoImportance" parameterType="Integer">
+  	
+		UPDATE
+			todo_mst
+		SET
+			importance_flag = CASE WHEN importance_flag = '0' THEN 1 ELSE 0 END
+		WHERE
+			todo_code = #{todo_code}
+			
+  	</update>
+  	
+  	<update id="updateTodoByTodocode" parameterType="com.springboot.todolist.domain.todo.Todo">
+  	
+  		update
+  			todo_mst
+  		set
+  			todo_content = #{todo_content},
+  			update_date = now()
+  		where
+  			todo_code = #{todo_code}
+  	</update>
+  	
+  	<delete id="remove" parameterType="Integer">
+  		delete
+  		from
+  			todo_mst
+  		where
+  			todo_code = #{todo_code}
+  	</delete>
+  </mapper>

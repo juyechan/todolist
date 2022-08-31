@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://kit.fontawesome.com/38bcedc4e2.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+
+    <title>Todolist</title>
+</head>
+<body>
+    <div id="container">
+        <header>
+
+        </header>
+        <main>
+            <section class="section-header">
+                <div class="type-select">
+                    <div class="type-select-box">
+                        <div class="selected-type">ALL</div>
+                        <button class="selected-type-button">
+                            <i class="fa-solid fa-caret-down"></i>
+                        </button>
+                    </div>
+                    <ul class="type-select-box-list visible">
+                        <li class="type-selected">ALL</li>
+                        <li>Importance</li>
+                        <li>Complete</li>
+                        <li>Incomplete</li>
+                    </ul>
+                </div>
+                
+                <div class="incomplete-count-text">
+                    완료하지 않은 일: <span class="incomplete-count-number">14</span>
+                </div>
+            </section>
+            <section class="section-body">
+                <ul class="todo-content-list">
+                    
+                </ul>
+                <div class="todo-add-button"><i class="fa-solid fa-plus"></i></div>
+            </section>
+        </main>
+    </div>
+
+    <div class="modal-container modal-visible">
+        <div class="modal-add-todo">
+            <div class="modal-header">          
+                    <span>Todo 추가</span>
+                    <button class="modal-close-button">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+            </div>
+
+
+            <div class="modal-items">
+                <input type="text" class="modal-todo-input">
+                <input type="checkbox" id="importance-check" class="importance-check">
+                <label for="importance-check"></label>
+            </div>
+            <button class="modal-commit-button">확인</button>
+        </div>
+    </div>
+    <script src="/static/js/index.js"></script>
+</body>
+</html>
